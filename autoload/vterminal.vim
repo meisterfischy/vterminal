@@ -1,13 +1,32 @@
-" Prevents the plugin from being loaded multiple times. If the loaded
-" variable exists, do nothing more. Otherwise, assign the loaded
-" variable and continue running this instance of the plugin.
-if exists("g:loaded_vterminal")
-    finish
-endif
-let g:loaded_vterminal = 1
-let g:vterminal_coverage = get(g:, 'vterminal_coverage', 0.33)
+let s:terminals = {}
+let s:jumpbacks = {}
 
-autocmd BufWinLeave * call vterminal#cleanup()
+function vterminal#open()
+    let current_page = tabpagenr()
+    if !exists("s:terminals[current_page]")
+        let s:jumpbacks[current_page] = win_getid()
+        let vterminal_height = winheight(0) * g:vterminal_coverage
+        bo term
+        let s:terminals[current_page] = win_getid()
+        exe "resize" vterminal_height
+        set wfh
+    endif
+endfunction
 
-command! -nargs=0 VTermOpen call vterminal#open()
-command! -nargs=0 VTermSwitch call vterminal#switch()
+function vterminal#cleanup()
+    if count(s:terminals, win_getid())
+        unlet s:terminals[tabpagenr()]
+    endif
+    if count(s:jumpbacks, win_getid())
+        unlet s:jumpbacks[tabpagenr()]
+    endif
+endfunction
+
+function vterminal#switch()
+    let current_page = tabpagenr()
+    if count(s:terminals, win_getid()) && exists("s:jumpbacks[current_page]")
+        exe win_id2win(s:jumpbacks[current_page]) .. "wincm w"
+    elseif count(s:jumpbacks, win_getid()) && exists("s:terminals[current_page]")
+        exe win_id2win(s:terminals[current_page]) .. "wincm w"
+    endif
+endfunction
