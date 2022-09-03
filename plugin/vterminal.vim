@@ -9,5 +9,5 @@ let g:vterminal_coverage = get(g:, 'vterminal_coverage', 0.33)
 
 autocmd BufDelete * call vterminal#cleanup()
 
-command! -nargs=0 VTermToggle call vterminal#toggle()
+command! -nargs=* VTermToggle call vterminal#toggle(<args>)
 command! -nargs=0 VTermSwitch call vterminal#switch()

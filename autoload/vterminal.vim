@@ -1,13 +1,16 @@
 let s:terminals = {}
 let s:jumpbacks = {}
 
-function vterminal#toggle()
+function vterminal#toggle(...)
     let current_page = tabpagenr()
     if !exists("s:terminals[current_page]")
         let s:jumpbacks[current_page] = win_getid()
         "let s:jumpbacks[current_page] = bufnr()
         let vterminal_height = winheight(0) * g:vterminal_coverage
-        bo term
+        exe "bo term"
+        if a:0 > 0
+            exe term_sendkeys(bufnr(), a:1 . "\<CR>")
+        endif
         "let s:terminals[current_page] = win_getid()
         let s:terminals[current_page] = bufnr()
         exe "resize" vterminal_height
