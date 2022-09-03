@@ -7,7 +7,7 @@ endif
 let g:loaded_vterminal = 1
 let g:vterminal_coverage = get(g:, 'vterminal_coverage', 0.33)
 
-autocmd BufWinLeave * call vterminal#cleanup()
+autocmd BufDelete * call vterminal#cleanup()
 
-command! -nargs=0 VTermOpen call vterminal#open()
+command! -nargs=0 VTermToggle call vterminal#toggle()
 command! -nargs=0 VTermSwitch call vterminal#switch()

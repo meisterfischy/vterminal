@@ -1,14 +1,15 @@
 # vterminal
 
 Adds some helper functions around the building terminal mode in vim.
-`VTermOpen` opens a vertical terminal window at the bottom and
+`VTermOpen` toggles a vertical terminal window at the bottom and
 with `VTermSwitch` it is then possible to easily switch between the current window and the terminal.
 
 Example config
 
 ```vim
 " Opens the terminal
-nmap <silent> <F10> :VTermOpen<CR>
+nmap <silent> <F10> :VTermToggle<CR>
+tmap <silent> <F10> <C-W>:VTermToggle<CR>
 " Switches between the current window and the terminal
 tnoremap <silent> <S-Tab> <C-W>:VTermSwitch<CR>
 nnoremap <silent> <S-Tab> :VTermSwitch<CR>
