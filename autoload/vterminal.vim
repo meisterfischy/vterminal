@@ -25,7 +25,6 @@ function vterminal#toggle(...)
             "exe "b" winbufnr(s:terminals[current_page])
             exe "b" s:terminals[current_page]
         elseif s:jumpbacks[current_page] == win_getid() || s:terminals[current_page] == bufnr()
-            echo s:terminals[current_page]
             "exe winbufnr(s:terminals[current_page]) .. "hide"
             exe bufwinnr(s:terminals[current_page]) .. "hide"
         endif
